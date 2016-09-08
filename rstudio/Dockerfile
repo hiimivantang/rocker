@@ -14,7 +14,8 @@ RUN sh -c "echo 'deb http://ftp.de.debian.org/debian jessie main' >> /etc/apt/so
 ## Symlink pandoc, pandoc-citeproc so they are available system-wide
 RUN rm -rf /var/lib/apt/lists/ \
   && apt-get update \
-  && apt-get install -y default-jre \
+  && apt-get install -y default-jdk \
+  && apt-get install -y libxml2-dev \
   && apt-get install -t stable libssl1.0.0 \
   && apt-get install -y -t unstable --no-install-recommends \
     ca-certificates \
