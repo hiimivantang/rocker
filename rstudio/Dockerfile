@@ -1,7 +1,7 @@
 ## Start with the official rocker image providing 'base R'
-FROM r-base:latest
-## This handle reaches Carl and Dirk
-MAINTAINER "Carl Boettiger and Dirk Eddelbuettel" rocker-maintainers@eddelbuettel.com
+FROM rocker/r-base:latest
+## This handle reaches Ivan Tang
+MAINTAINER Ivan Tang <hiimivantang@gmail.com>
 
 ## Add RStudio binaries to PATH
 ENV PATH /usr/lib/rstudio-server/bin/:$PATH
@@ -14,6 +14,7 @@ RUN sh -c "echo 'deb http://ftp.de.debian.org/debian jessie main' >> /etc/apt/so
 ## Symlink pandoc, pandoc-citeproc so they are available system-wide
 RUN rm -rf /var/lib/apt/lists/ \
   && apt-get update \
+  && apt-get install -y default-jre \
   && apt-get install -t stable libssl1.0.0 \
   && apt-get install -y -t unstable --no-install-recommends \
     ca-certificates \
@@ -38,6 +39,11 @@ RUN rm -rf /var/lib/apt/lists/ \
   && mkdir /root/.pandoc && ln -s /opt/pandoc/templates /root/.pandoc/templates \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/
+
+## Install rJava package
+RUN install2.r --error rJava \
+  && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+
 
 ## Ensure that if both httr and httpuv are installed downstream, oauth 2.0 flows still work correctly.
 RUN echo '\n\
